@@ -84,13 +84,40 @@ class ConfidenceRouter:
         #      action="escalate", priority="high",
         #      requires_human=True, reason="Low confidence — escalating"
 
+        if action_type in HIGH_RISK_ACTIONS:
+            return RoutingDecision(
+                action="escalate",
+                confidence=confidence,
+                reason=f"High-risk action: {action_type}",
+                priority="high",
+                requires_human=True,
+            )
+
+        if confidence >= self.HIGH_THRESHOLD:
+            return RoutingDecision(
+                action="auto_send",
+                confidence=confidence,
+                reason="High confidence and low-risk action",
+                priority="low",
+                requires_human=False,
+            )
+
+        if confidence >= self.MEDIUM_THRESHOLD:
+            return RoutingDecision(
+                action="queue_review",
+                confidence=confidence,
+                reason="Medium confidence - human review before sending",
+                priority="normal",
+                requires_human=True,
+            )
+
         return RoutingDecision(
-            action="auto_send",
+            action="escalate",
             confidence=confidence,
-            reason="TODO: implement routing logic",
-            priority="low",
-            requires_human=False,
-        )  # TODO: Replace with implementation
+            reason="Low confidence - immediate human escalation",
+            priority="high",
+            requires_human=True,
+        )
 
 
 # ============================================================
@@ -109,27 +136,27 @@ class ConfidenceRouter:
 hitl_decision_points = [
     {
         "id": 1,
-        "name": "TODO: Name this decision point",
-        "trigger": "TODO: When does this trigger?",
-        "hitl_model": "TODO: human-in-the-loop / human-on-the-loop / human-as-tiebreaker",
-        "context_needed": "TODO: What does the reviewer need to see?",
-        "example": "TODO: Give a concrete example scenario",
+        "name": "Large or unusual money movement",
+        "trigger": "Transfer amount exceeds 50M VND or deviates from the customer's normal pattern.",
+        "hitl_model": "human-in-the-loop",
+        "context_needed": "Customer KYC tier, recent transaction history, device/IP risk, beneficiary history, and fraud alerts.",
+        "example": "A customer who usually transfers under 2M VND asks to send 120M VND to a new beneficiary.",
     },
     {
         "id": 2,
-        "name": "TODO: Name this decision point",
-        "trigger": "TODO: When does this trigger?",
-        "hitl_model": "TODO: human-in-the-loop / human-on-the-loop / human-as-tiebreaker",
-        "context_needed": "TODO: What does the reviewer need to see?",
-        "example": "TODO: Give a concrete example scenario",
+        "name": "Identity or credential change",
+        "trigger": "Request changes password, phone number, email, address, or recovery method.",
+        "hitl_model": "human-in-the-loop",
+        "context_needed": "Authentication strength, recent failed logins, account age, support notes, and requested change details.",
+        "example": "A user logged in from a new device asks to change the account phone number and reset transfer limits.",
     },
     {
         "id": 3,
-        "name": "TODO: Name this decision point",
-        "trigger": "TODO: When does this trigger?",
-        "hitl_model": "TODO: human-in-the-loop / human-on-the-loop / human-as-tiebreaker",
-        "context_needed": "TODO: What does the reviewer need to see?",
-        "example": "TODO: Give a concrete example scenario",
+        "name": "Conflicting safety or compliance signal",
+        "trigger": "The LLM judge, rule-based guardrail, or fraud model disagrees with the agent's proposed answer.",
+        "hitl_model": "human-as-tiebreaker",
+        "context_needed": "Original user request, proposed answer, guardrail hits, judge scores, and relevant banking policy.",
+        "example": "The assistant drafts loan advice, but the judge flags possible hallucinated eligibility criteria.",
     },
 ]
 

@@ -5,11 +5,11 @@ import os
 
 
 def setup_api_key():
-    """Load Google API key from environment or prompt."""
-    if "GOOGLE_API_KEY" not in os.environ:
-        os.environ["GOOGLE_API_KEY"] = input("Enter Google API Key: ")
-    os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "0"
-    print("API key loaded.")
+    """Load the OpenAI API key used by the lab's LLM calls."""
+    if "OPENAI_API_KEY" not in os.environ:
+        os.environ["OPENAI_API_KEY"] = input("Enter OpenAI API Key: ")
+    os.environ.setdefault("OPENAI_MODEL", "gpt-5.5")
+    print("OpenAI API key loaded.")
 
 
 # Allowed banking topics (used by topic_filter)

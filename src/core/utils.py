@@ -8,14 +8,17 @@ async def chat_with_agent(agent, runner, user_message: str, session_id=None):
     """Send a message to the agent and get the response.
 
     Args:
-        agent: The LlmAgent instance
-        runner: The InMemoryRunner instance
+        agent: The agent instance
+        runner: The runner instance
         user_message: Plain text message to send
         session_id: Optional session ID to continue a conversation
 
     Returns:
         Tuple of (response_text, session)
     """
+    if hasattr(runner, "chat"):
+        return await runner.chat(user_message), None
+
     user_id = "student"
     app_name = runner.app_name
 

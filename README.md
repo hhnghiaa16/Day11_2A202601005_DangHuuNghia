@@ -44,15 +44,16 @@ Day-11-Guardrails-HITL-Responsible-AI/
 ### Google Colab (recommended)
 
 1. Upload `notebooks/lab11_guardrails_hitl.ipynb` to Google Colab
-2. Create a Google API Key at [Google AI Studio](https://aistudio.google.com/apikey)
-3. Save the API key in Colab Secrets as `GOOGLE_API_KEY`
+2. Create an OpenAI API key from the OpenAI dashboard
+3. Save the API key in Colab Secrets as `OPENAI_API_KEY`
 4. Run cells in order
 
 ### Local (Notebook)
 
 ```bash
 pip install -r requirements.txt
-export GOOGLE_API_KEY="your-api-key-here"
+export OPENAI_API_KEY="your-api-key-here"
+export OPENAI_MODEL="gpt-4o-mini"
 jupyter notebook notebooks/lab11_guardrails_hitl.ipynb
 ```
 
@@ -61,7 +62,8 @@ jupyter notebook notebooks/lab11_guardrails_hitl.ipynb
 ```bash
 cd src/
 pip install -r ../requirements.txt
-export GOOGLE_API_KEY="your-api-key-here"
+export OPENAI_API_KEY="your-api-key-here"
+export OPENAI_MODEL="gpt-5.5"
 
 # Run the full lab
 python main.py
@@ -83,7 +85,7 @@ python hitl/hitl.py
 
 - **Google ADK** — Agent Development Kit (plugins, runners)
 - **NeMo Guardrails** — NVIDIA framework with Colang (declarative safety rules)
-- **Gemini 2.5 Flash/Flash Lite** — LLM backend (you can switch to other models if you want)
+- **OpenAI Responses API** — LLM backend (set `OPENAI_MODEL` to switch models)
 
 ## Lab Structure (2.5 hours)
 
@@ -106,12 +108,12 @@ python hitl/hitl.py
 | # | Description | Framework |
 |---|-------------|-----------|
 | 1 | Write 5 adversarial prompts | - |
-| 2 | Generate attack test cases with AI | Gemini |
+| 2 | Generate attack test cases with AI | OpenAI |
 | 3 | Injection detection (regex) | Python |
 | 4 | Topic filter | Python |
 | 5 | Input Guardrail Plugin | Google ADK |
 | 6 | Content filter (PII, secrets) | Python |
-| 7 | LLM-as-Judge safety check | Gemini |
+| 7 | LLM-as-Judge safety check | OpenAI |
 | 8 | Output Guardrail Plugin | Google ADK |
 | 9 | NeMo Guardrails Colang config | NeMo |
 | 10 | Rerun 5 attacks with guardrails | Google ADK |
@@ -124,7 +126,7 @@ python hitl/hitl.py
 - [OWASP Top 10 for LLM](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
 - [NeMo Guardrails](https://github.com/NVIDIA/NeMo-Guardrails)
 - [Google ADK Documentation](https://google.github.io/adk-docs/)
-- [Official Google's Gemini cookbook](https://github.com/google-gemini/cookbook/blob/main/examples/gemini_google_adk_model_guardrails.ipynb)
+- [OpenAI API Documentation](https://developers.openai.com/api/docs)
 - [AI Safety Fundamentals](https://aisafetyfundamentals.com/)
 - [AI Red Teaming Guide](https://github.com/requie/AI-Red-Teaming-Guide)
 - [antoan.ai - AI Safety Vietnam](https://antoan.ai)
